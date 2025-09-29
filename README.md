@@ -1,59 +1,180 @@
 # IonxSearchSelect
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.1.
+A modern **Search & Select component** for Angular + Ionic.  
+Built with **Standalone Components**, **Angular Signals**, and full **CVA (ControlValueAccessor)** support.
 
-## Development server
+<p align="center">
+  <img alt="Angular" src="https://img.shields.io/badge/Angular-20+-dd0031?logo=angular&logoColor=white">
+  <img alt="Ionic" src="https://img.shields.io/badge/Ionic-8+-3880ff?logo=ionic&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-green">
+</p>
 
-To start a local development server, run:
+## ✨ Features
 
-```bash
-ng serve
-```
+- 🔎 Searchable select with keyboard navigation
+- 🌀 Works with **Reactive Forms** and **Template-driven Forms**
+- 🧩 Can be used standalone without Angular Forms
+- 🌍 Built-in i18n (EN/DE) with overrides
+- 🎨 Ionic design, ships as Angular standalone library
+- ♻️ No RxJS required (pure Signals API)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## 📦 Installation
 
 ```bash
-ng build
+npm install ionx-search-select
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Peer dependencies:
 
-## Running unit tests
+- Angular ≥ 17
+- Ionic ≥ 8
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🚀 Usage
+
+### 1. Reactive Forms (`FormControl`)
+
+```ts
+// demo.page.ts
+import { FormControl } from '@angular/forms';
+import { SelectOption } from 'ionx-search-select';
+
+type Id = string;
+
+@Component({
+  /* ... */
+})
+export class DemoPage {
+  city = new FormControl<Id | null>(null);
+
+  cityOptions: SelectOption<Id>[] = [
+    { value: 'ber', label: 'Berlin' },
+    { value: 'ham', label: 'Hamburg' },
+    { value: 'muc', label: 'Munich' },
+    { value: 'cgn', label: 'Cologne', disabled: true },
+    { value: 'fra', label: 'Frankfurt' },
+  ];
+}
+```
+
+```html
+<ionx-search-select [options]="cityOptions" placeholder="Choose a city…" [formControl]="city">
+</ionx-search-select>
+
+<p>Selected: {{ city.value }}</p>
+```
+
+### 2. Template-driven Forms (`[(ngModel)]`)
+
+```ts
+// demo.page.ts
+selectedCity: string | null = null;
+
+cityOptions: SelectOption<string>[] = [
+  { value: 'ber', label: 'Berlin' },
+  { value: 'ham', label: 'Hamburg' },
+  { value: 'muc', label: 'Munich' },
+  { value: 'fra', label: 'Frankfurt' },
+];
+```
+
+```html
+<ionx-search-select [options]="cityOptions" placeholder="Choose a city…" [(ngModel)]="selectedCity">
+</ionx-search-select>
+
+<p>Selected: {{ selectedCity }}</p>
+```
+
+### 3. Standalone (without Angular Forms)
+
+```ts
+// demo.page.ts
+selectedCity: string | null = null;
+
+cityOptions: SelectOption<string>[] = [
+  { value: 'ber', label: 'Berlin' },
+  { value: 'ham', label: 'Hamburg' },
+  { value: 'muc', label: 'Munich' },
+];
+```
+
+```html
+<ionx-search-select
+  [options]="cityOptions"
+  [value]="selectedCity"
+  (changed)="selectedCity = $event"
+>
+</ionx-search-select>
+
+<p>Selected: {{ selectedCity }}</p>
+```
+
+## ⚙️ Inputs
+
+| Input               | Type                               | Default        | Description                      |
+| ------------------- | ---------------------------------- | -------------- | -------------------------------- |
+| `options`           | `SelectOption<T>[]`                | `[]`           | Options to display               |
+| `placeholder`       | `string`                           | `Select…`      | Trigger label & modal title      |
+| `multiple`          | `boolean`                          | `false`        | Enable multi select              |
+| `clearable`         | `boolean`                          | `true`         | Show **Clear** button            |
+| `closeOnSelect`     | `boolean`                          | `true`         | Auto close after select (single) |
+| `locale`            | `'en' \| 'de'`                     | `'en'`         | Built-in i18n                    |
+| `i18n`              | `Partial<IonxSearchSelectI18n>`    | `{}`           | Override any text                |
+| `searchPlaceholder` | `string \| null`                   | `null`         | Explicit search placeholder      |
+| `displayWith`       | `(opt: SelectOption<T>) => string` | `o => o.label` | Custom label renderer            |
+| `compareWith`       | `(a: T, b: T) => boolean`          | `a===b`        | Custom equality fn               |
+| `trackBy`           | `(o: SelectOption<T>) => unknown`  | `o.value`      | TrackBy fn                       |
+
+## 📤 Outputs
+
+| Output         | Payload            | Description            |
+| -------------- | ------------------ | ---------------------- |
+| `changed`      | `T \| T[] \| null` | Value changed          |
+| `openedChange` | `boolean`          | Modal open/close state |
+| `opened`       | `void`             | Modal opened           |
+| `closed`       | `void`             | Modal closed           |
+| `cleared`      | `void`             | Clear clicked          |
+
+## 🔑 Interfaces
+
+```ts
+export interface SelectOption<T = unknown> {
+  value: T;
+  label: string;
+  disabled?: boolean;
+}
+
+export type IonxSearchSelectI18n = {
+  clear: string;
+  done: string;
+  selected: string;
+  noResults: string;
+  search: string;
+  searchAriaLabel: string;
+  closeAriaLabel: string;
+};
+```
+
+## 🛠️ Development
+
+Build the library:
+
+```bash
+ng build ionx-search-select
+```
+
+Run the demo app:
+
+```bash
+ng serve demo
+```
+
+Run unit tests:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## 📄 License
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT – free to use, modify and distribute.
