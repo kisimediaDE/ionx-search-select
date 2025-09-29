@@ -27,7 +27,7 @@ npm install ionx-search-select
 
 Peer dependencies:
 
-- Angular ≥ 17
+- Angular ≥ 20
 - Ionic ≥ 8
 
 ## 🚀 Usage
