@@ -1,5 +1,11 @@
 <!-- Trigger -->
-<ion-button (click)="open()" [disabled]="disabled()" [aria-haspopup]="'dialog'">
+<ion-button
+  (click)="open()"
+  [disabled]="disabled()"
+  [aria-haspopup]="'dialog'"
+  [aria-expanded]="opened() ? 'true' : 'false'"
+  [attr.aria-controls]="opened() ? listId : null"
+>
   <span>{{ triggerLabel() }}</span>
   @if (multiple() && selectionCount() > 0) {
   <ion-badge class="ml-2">{{ selectionCount() }}</ion-badge>
@@ -53,7 +59,7 @@
           role="option"
           [id]="optionId(opt)"
           [class.active]="isActive(opt)"
-          [attr.aria-selected]="isSelected(opt)"
+          [attr.aria-selected]="isSelected(opt) ? 'true' : 'false'"
           [disabled]="opt.disabled"
           (click)="pick(opt)"
         >

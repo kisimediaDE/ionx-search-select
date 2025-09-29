@@ -143,8 +143,9 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
   readonly listId = `${this.id}-list`;
 
   /** Refs */
-  searchEl = viewChild<IonSearchbar>('searchEl');
-  listEl = viewChild<ElementRef<HTMLElement>>('listEl');
+  private searchEl = viewChild<IonSearchbar>('searchEl');
+  private listEl = viewChild<ElementRef<HTMLElement>>('listEl');
+  private triggerEl = viewChild<ElementRef<HTMLButtonElement>>('triggerEl');
 
   /** I18n zusammenführen: Overrides > Inputs > Locale-Defaults */
   private dict = computed<IonxSearchSelectI18n>(() => {
@@ -163,7 +164,7 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
   filtered = computed(() => {
     const q = this.query().trim().toLowerCase();
     if (!q) return this.options();
-    return this.options().filter((o) => this.displayWith()(o).toLowerCase().includes(q));
+    return this.options().filter((o) => String(this.displayWith()(o)).toLowerCase().includes(q));
   });
 
   selectionCount = computed(() => {
@@ -218,6 +219,7 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
     this.openedChange.emit(false);
     this.closedEvent.emit();
     this.onTouched();
+    this.triggerEl()?.nativeElement?.focus();
   }
 
   onDidDismiss() {

@@ -54,7 +54,7 @@ export class DemoPage {
     { value: 'ber', label: 'Berlin' },
     { value: 'ham', label: 'Hamburg' },
     { value: 'muc', label: 'München' },
-    { value: 'cgN', label: 'Köln', disabled: true },
+    { value: 'cgn', label: 'Köln', disabled: true },
     { value: 'fra', label: 'Frankfurt' },
   ];
 
