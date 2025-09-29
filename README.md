@@ -21,6 +21,16 @@ Built with **Standalone Components**, **Angular Signals**, and full **CVA (Contr
 
 ## 📦 Installation
 
+This library requires **@ionic/angular** and **ionicons** as peer dependencies.
+
+Install them step by step:
+
+```bash
+npm i @ionic/angular ionicons
+```
+
+Then install the library:
+
 ```bash
 npm install ionx-search-select
 ```
