@@ -1,14 +1,29 @@
 {
   "name": "ionx-search-select",
+  "workspaces": [
+    "projects/*"
+  ],
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve demo",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
+    "build": "ng build",
     "build:lib": "ng build ionx-search-select",
-    "release": "npm run build:lib && cd dist/ionx-search-select && npm publish"
+    "build:demo": "ng build demo",
+    "test": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
+    "test:lib": "ng test ionx-search-select --watch=false --browsers=ChromeHeadless --code-coverage || ng test --watch=false --browsers=ChromeHeadless --code-coverage",
+    "clean": "rimraf dist .angular/out-tsc || rm -rf dist .angular/out-tsc",
+    "verify": "npm run clean && npm ci && npm run test && npm run build:lib && npm run pack",
+    "pack": "npm pack ./dist/ionx-search-select --dry-run",
+    "publish:dist": "npm publish ./dist/ionx-search-select --access public",
+    "version:patch": "npm version patch -w ionx-search-select",
+    "version:minor": "npm version minor -w ionx-search-select",
+    "version:major": "npm version major -w ionx-search-select",
+    "release:patch": "npm run verify && npm run version:patch && npm run publish:dist",
+    "release:minor": "npm run verify && npm run version:minor && npm run publish:dist",
+    "release:major": "npm run verify && npm run version:major && npm run publish:dist",
+    "release": "npm run verify && npm run release:patch"
   },
   "prettier": {
     "printWidth": 100,

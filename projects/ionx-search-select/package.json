@@ -1,6 +1,32 @@
 {
   "name": "ionx-search-select",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "description": "A modern Search & Select component for Angular + Ionic with Signals and full CVA support.",
+  "keywords": [
+    "angular",
+    "ionic",
+    "ionicons",
+    "select",
+    "search",
+    "component",
+    "signals",
+    "cva",
+    "standalone-components"
+  ],
+  "license": "MIT",
+  "author": "KisimediaDE <code@kisimedia.de>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kisimediaDE/ionx-search-select.git",
+    "directory": "projects/ionx-search-select"
+  },
+  "bugs": {
+    "url": "https://github.com/kisimediaDE/ionx-search-select/issues"
+  },
+  "homepage": "https://github.com/kisimediaDE/ionx-search-select#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@angular/common": "^20.0.0",
     "@angular/core": "^20.0.0",
@@ -10,6 +36,13 @@
   },
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kisimediaDE"
   },
   "sideEffects": false
 }
