@@ -6,11 +6,11 @@
     "@angular/core": "^20.0.0",
     "@angular/forms": "^20.0.0",
     "@ionic/angular": "^8.0.0",
+    "ionicons": "^8.0.13",
     "rxjs": "^7.8.0"
   },
   "dependencies": {
-    "tslib": "^2.3.0",
-    "ionicons": "^8.0.13"
+    "tslib": "^2.3.0"
   },
   "sideEffects": false
 }
