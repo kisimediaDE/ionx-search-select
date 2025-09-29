@@ -5,7 +5,6 @@ import {
   computed,
   effect,
   forwardRef,
-  inject,
   input,
   output,
   signal,
@@ -27,14 +26,48 @@ import {
   IonFooter,
   IonButtons,
   IonBadge,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ensureIcons } from './providers/icons.provider';
 
 export interface SelectOption<T = unknown> {
   value: T;
   label: string;
   disabled?: boolean;
 }
+
+/** Übersetzbare Texte */
+export type IonxSearchSelectI18n = {
+  clear: string; // Button-Label "Leeren"
+  done: string; // Button-Label "Fertig"
+  selected: string; // Note-Label "Ausgewählt"
+  noResults: string; // Platzhalter, wenn gefilterte Liste leer ist
+  search: string; // Placeholder im Suchfeld
+  searchAriaLabel: string; // ARIA-Label für das Suchfeld
+  closeAriaLabel: string; // ARIA-Label für den Schließen-Button
+};
+
+const I18N_DICTIONARIES: Record<'en' | 'de', IonxSearchSelectI18n> = {
+  en: {
+    clear: 'Clear',
+    done: 'Done',
+    selected: 'Selected',
+    noResults: 'No results',
+    search: 'Search',
+    searchAriaLabel: 'Search options',
+    closeAriaLabel: 'Close',
+  },
+  de: {
+    clear: 'Leeren',
+    done: 'Fertig',
+    selected: 'Ausgewählt',
+    noResults: 'Keine Ergebnisse',
+    search: 'Suchen',
+    searchAriaLabel: 'Optionen durchsuchen',
+    closeAriaLabel: 'Schließen',
+  },
+};
 
 let uid = 0;
 
@@ -56,6 +89,7 @@ let uid = 0;
     IonFooter,
     IonButtons,
     IonBadge,
+    IonIcon,
   ],
   templateUrl: './ionx-search-select.html',
   styleUrls: ['./ionx-search-select.scss'],
@@ -72,11 +106,17 @@ let uid = 0;
 export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
   /** Inputs */
   options = input<SelectOption<T>[]>([]);
-  placeholder = input('Select…');
+  placeholder = input('Select…'); // Titel im Modal & Trigger-Fallback
   multiple = input(false);
   clearable = input(true);
-  closeOnSelect = input(true);
-  searchPlaceholder = input('Search');
+  closeOnSelect = input(true); // nur relevant im Single-Mode
+
+  /** Neu: Sprache & Überschreibungen */
+  locale = input<'en' | 'de'>('en');
+  i18n = input<Partial<IonxSearchSelectI18n>>({});
+
+  /** Backwards-Compat: expliziter Search-Placeholder */
+  searchPlaceholder = input<string | null>(null);
 
   /** Customization hooks */
   displayWith = input<(opt: SelectOption<T>) => string>((o) => o.label);
@@ -103,9 +143,21 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
   readonly listId = `${this.id}-list`;
 
   /** Refs */
-  private host = inject(ElementRef<HTMLElement>);
-  searchEl = viewChild<ElementRef<HTMLIonSearchbarElement>>('searchEl');
+  searchEl = viewChild<IonSearchbar>('searchEl');
   listEl = viewChild<ElementRef<HTMLElement>>('listEl');
+
+  /** I18n zusammenführen: Overrides > Inputs > Locale-Defaults */
+  private dict = computed<IonxSearchSelectI18n>(() => {
+    const base = I18N_DICTIONARIES[this.locale()] ?? I18N_DICTIONARIES.en;
+    const overrides = this.i18n();
+    const explicitSearch = this.searchPlaceholder();
+
+    return {
+      ...base,
+      ...(explicitSearch ? { search: explicitSearch } : null),
+      ...overrides,
+    };
+  });
 
   /** Derived */
   filtered = computed(() => {
@@ -149,15 +201,16 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
     }
   });
 
+  constructor() {
+    ensureIcons();
+  }
+
   /** Public API */
   open() {
     if (this.disabled()) return;
     this.opened.set(true);
     this.openedChange.emit(true);
     this.openedEvent.emit();
-
-    // Fokussieren, wenn Modal gerendert ist
-    queueMicrotask(() => this.searchEl()?.nativeElement.setFocus());
   }
 
   close() {
@@ -168,8 +221,11 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
   }
 
   onDidDismiss() {
-    // Falls durch Overlay geschlossen
     if (this.opened()) this.close();
+  }
+
+  onDidPresent() {
+    this.focusSearch();
   }
 
   clear() {
@@ -178,14 +234,16 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
     this.onChange(next);
     this.changed.emit(next);
     this.cleared.emit();
-    // Fokus zurück in die Suche
-    queueMicrotask(() => this.searchEl()?.nativeElement.setFocus());
+    if (this.opened()) this.focusSearch();
   }
 
   onQuery(q: string) {
     this.query.set(q);
-    // beim neuen Filter aktiv auf das erste Treffer-Item setzen
     if (this.filtered().length > 0) this.activeIndex.set(0);
+  }
+
+  private focusSearch() {
+    this.searchEl()?.setFocus();
   }
 
   /** ARIA/IDs */
@@ -225,7 +283,7 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
       this.valueSig.set(next);
       this.onChange(next);
       this.changed.emit(next);
-      // bleibt offen – Footer „Fertig“ schließt
+      // bleibt offen – Footer "Done/Fertig" schließt
     } else {
       this.valueSig.set(opt.value);
       this.onChange(opt.value);
@@ -273,6 +331,11 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
     opt?.scrollIntoView({ block: 'nearest' });
   }
 
+  /** Exposed i18n getters for template */
+  get t() {
+    return this.dict();
+  }
+
   /** ControlValueAccessor */
   private onChange: (v: T | T[] | null) => void = () => {};
   private onTouched: () => void = () => {};
@@ -280,15 +343,12 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
   writeValue(obj: T | T[] | null): void {
     this.valueSig.set(obj);
   }
-
   registerOnChange(fn: (v: T | T[] | null) => void): void {
     this.onChange = fn;
   }
-
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
-
   setDisabledState(isDisabled: boolean): void {
     this.disabled.set(isDisabled);
   }
