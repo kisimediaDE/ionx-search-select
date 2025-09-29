@@ -1,5 +1,5 @@
 {
-  "name": "ionx-search-select",
+  "name": "ionx-search-select-monorepo",
   "workspaces": [
     "projects/*"
   ],
@@ -14,7 +14,8 @@
     "test": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "test:lib": "ng test ionx-search-select --watch=false --browsers=ChromeHeadless --code-coverage || ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "clean": "rimraf dist .angular/out-tsc || rm -rf dist .angular/out-tsc",
-    "verify": "npm run clean && npm ci && npm run test && npm run build:lib && npm run pack",
+    "verify": "npm run clean && npm ci && npm run build:lib && npm run test && npm run pack",
+    "verify:local": "npm run clean && npm install && npm run build:lib && npm run test && npm run pack",
     "pack": "npm pack ./dist/ionx-search-select --dry-run",
     "publish:dist": "npm publish ./dist/ionx-search-select --access public",
     "version:patch": "npm version patch -w ionx-search-select",
@@ -55,13 +56,14 @@
     "@angular/cli": "^20.2.1",
     "@angular/compiler-cli": "^20.2.0",
     "@types/jasmine": "~5.1.0",
-    "jasmine-core": "~5.9.0",
+    "jasmine-core": "^5.11.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^20.3.0",
+    "rimraf": "^6.0.1",
     "sass": "^1.93.2",
     "typescript": "~5.9.2"
   }

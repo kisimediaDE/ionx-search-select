@@ -3,5 +3,6 @@
   "dest": "../../dist/ionx-search-select",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "assets": ["README.md", "LICENSE"]
 }
