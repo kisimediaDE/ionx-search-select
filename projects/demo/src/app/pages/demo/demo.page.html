@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>ionx-search-select – Demo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row class="ion-margin-bottom">
+      <ion-col size="12" sizeLg="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Single Select</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ionx-search-select
+              [options]="cityOptions"
+              placeholder="Stadt wählen…"
+              [formControl]="form.controls.city"
+              (changed)="onSingleChanged($event)"
+            >
+            </ionx-search-select>
+
+            <ion-list class="ion-margin-top">
+              <ion-item>
+                <ion-label>Aktuelle Auswahl</ion-label>
+                <ion-note slot="end">{{ currentCityLabel() }}</ion-note>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" sizeLg="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Multi Select</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ionx-search-select
+              [options]="cityOptions"
+              [multiple]="true"
+              placeholder="Städte wählen…"
+              [formControl]="form.controls.cities"
+              (changed)="onMultiChanged($event)"
+            >
+            </ionx-search-select>
+
+            <ion-list class="ion-margin-top">
+              <ion-item>
+                <ion-label>Aktuelle Auswahl</ion-label>
+                <ion-note slot="end">{{ currentCitiesLabel() }}</ion-note>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

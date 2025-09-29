@@ -1,0 +1,15 @@
+:host {
+  display: inline-block;
+}
+
+ion-item.active {
+  --background: var(--ion-color-step-150, rgba(0, 0, 0, 0.04));
+}
+
+.text-weak {
+  opacity: 0.6;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}

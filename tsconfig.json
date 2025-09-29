@@ -5,6 +5,9 @@
   "compilerOptions": {
     "strict": true,
     "noImplicitOverride": true,
+    "paths": {
+      "ionx-search-select": ["./dist/ionx-search-select"]
+    },
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -22,5 +25,19 @@
     "typeCheckHostBindings": true,
     "strictTemplates": true
   },
-  "files": []
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/ionx-search-select/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ionx-search-select/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo/tsconfig.spec.json"
+    }
+  ]
 }

@@ -1,0 +1,78 @@
+<!-- Trigger -->
+<ion-button (click)="open()" [disabled]="disabled()" [aria-haspopup]="'dialog'">
+  <span>{{ triggerLabel() }}</span>
+  @if (multiple() && selectionCount() > 0) {
+  <ion-badge class="ml-2">{{ selectionCount() }}</ion-badge>
+  }
+</ion-button>
+
+<!-- Modal -->
+<ion-modal [isOpen]="opened()" (didDismiss)="onDidDismiss()" [attr.aria-labelledby]="titleId">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title [id]="titleId">{{ placeholder() }}</ion-title>
+
+        @if (clearable() && hasSelection()) {
+        <ion-buttons slot="end">
+          <ion-button fill="clear" (click)="clear()"> Clear </ion-button>
+        </ion-buttons>
+        }
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content (keydown)="onKeydown($event)">
+      <ion-searchbar
+        [value]="query()"
+        (ionInput)="onQuery($any($event).detail?.value ?? '')"
+        [placeholder]="searchPlaceholder()"
+        aria-label="Search options"
+        [debounce]="0"
+        #searchEl
+      >
+      </ion-searchbar>
+
+      @if (filtered().length === 0) {
+      <div class="ion-padding ion-text-center text-weak">Keine Ergebnisse</div>
+      }
+
+      <ion-list
+        role="listbox"
+        [attr.aria-multiselectable]="multiple() ? 'true' : null"
+        [attr.aria-activedescendant]="activeDescId()"
+        [id]="listId"
+        #listEl
+      >
+        @for (opt of filtered(); track trackBy()(opt)) {
+        <ion-item
+          button
+          role="option"
+          [id]="optionId(opt)"
+          [class.active]="isActive(opt)"
+          [attr.aria-selected]="isSelected(opt)"
+          [disabled]="opt.disabled"
+          (click)="pick(opt)"
+        >
+          <ion-label>{{ displayWith()(opt) }}</ion-label>
+          @if (isSelected(opt)) { <ion-note slot="end">Ausgewählt</ion-note> }
+        </ion-item>
+        }
+      </ion-list>
+    </ion-content>
+
+    @if (multiple()) {
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button fill="clear" (click)="close()">Fertig</ion-button>
+        </ion-buttons>
+        @if (clearable() && hasSelection()) {
+        <ion-buttons slot="end">
+          <ion-button fill="clear" (click)="clear()">Leeren</ion-button>
+        </ion-buttons>
+        }
+      </ion-toolbar>
+    </ion-footer>
+    }
+  </ng-template>
+</ion-modal>
