@@ -23,7 +23,7 @@
     "release:patch": "npm run verify && npm run version:patch && npm run publish:dist",
     "release:minor": "npm run verify && npm run version:minor && npm run publish:dist",
     "release:major": "npm run verify && npm run version:major && npm run publish:dist",
-    "release": "npm run verify && npm run release:patch"
+    "release": "npm run verify && npm run publish:dist"
   },
   "prettier": {
     "printWidth": 100,
