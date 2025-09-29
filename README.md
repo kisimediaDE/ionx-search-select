@@ -10,6 +10,10 @@ Built with **Standalone Components**, **Angular Signals**, and full **CVA (Contr
   <img alt="License" src="https://img.shields.io/badge/License-MIT-green">
 </p>
 
+<p align="center">
+  <img src="demo.gif" alt="IonxSearchSelect Demo" height="400">
+</p>
+
 ## ✨ Features
 
 - 🔎 Searchable select with keyboard navigation
