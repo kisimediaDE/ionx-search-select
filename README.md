@@ -26,7 +26,7 @@ This library requires **@ionic/angular** and **ionicons** as peer dependencies.
 Install them step by step:
 
 ```bash
-npm i @ionic/angular ionicons
+npm install @ionic/angular ionicons
 ```
 
 Then install the library:

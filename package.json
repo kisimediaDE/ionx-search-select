@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test --watch=false --browsers=ChromeHeadless --code-coverage"
+    "test": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
+    "build:lib": "ng build ionx-search-select",
+    "release": "npm run build:lib && cd dist/ionx-search-select && npm publish"
   },
   "prettier": {
     "printWidth": 100,
