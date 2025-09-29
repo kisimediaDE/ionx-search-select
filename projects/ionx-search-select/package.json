@@ -14,7 +14,7 @@
     "standalone-components"
   ],
   "license": "MIT",
-  "author": "KisimediaDE <code@kisimedia.de>",
+  "author": "KisimediaDE <code@kisimedia.de> (https://kisimedia.de)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kisimediaDE/ionx-search-select.git",
@@ -28,11 +28,11 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@angular/common": "^20.0.0",
-    "@angular/core": "^20.0.0",
-    "@angular/forms": "^20.0.0",
+    "@angular/common": "^20.0.0 || ^21.0.0",
+    "@angular/core": "^20.0.0 || ^21.0.0",
+    "@angular/forms": "^20.0.0 || ^21.0.0",
     "@ionic/angular": "^8.0.0",
-    "ionicons": "^8.0.13"
+    "ionicons": "^8.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

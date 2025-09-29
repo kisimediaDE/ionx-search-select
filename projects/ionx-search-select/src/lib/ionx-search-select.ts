@@ -106,16 +106,16 @@ let uid = 0;
 export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
   /** Inputs */
   options = input<SelectOption<T>[]>([]);
-  placeholder = input('Select…'); // Titel im Modal & Trigger-Fallback
+  placeholder = input('Select…'); // Title in Modal
   multiple = input(false);
   clearable = input(true);
-  closeOnSelect = input(true); // nur relevant im Single-Mode
+  closeOnSelect = input(true); // only relevant if !multiple
 
-  /** Neu: Sprache & Überschreibungen */
+  /** Neu: Language & Overrides */
   locale = input<'en' | 'de'>('en');
   i18n = input<Partial<IonxSearchSelectI18n>>({});
 
-  /** Backwards-Compat: expliziter Search-Placeholder */
+  /** Backwards-Compat: explicit Search-Placeholder */
   searchPlaceholder = input<string | null>(null);
 
   /** Customization hooks */
@@ -147,7 +147,7 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
   private listEl = viewChild<ElementRef<HTMLElement>>('listEl');
   private triggerEl = viewChild<ElementRef<HTMLButtonElement>>('triggerEl');
 
-  /** I18n zusammenführen: Overrides > Inputs > Locale-Defaults */
+  /** I18n computed: Overrides > Inputs > Locale-Defaults */
   private dict = computed<IonxSearchSelectI18n>(() => {
     const base = I18N_DICTIONARIES[this.locale()] ?? I18N_DICTIONARIES.en;
     const overrides = this.i18n();
@@ -191,7 +191,7 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
     return found ? this.displayWith()(found) : this.placeholder();
   });
 
-  /** Keep activeIndex innerhalb des gefilterten Bereichs */
+  /** Keep activeIndex within the filtered range */
   private clampActive = effect(() => {
     const len = this.filtered().length;
     if (len === 0) {
@@ -285,7 +285,7 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
       this.valueSig.set(next);
       this.onChange(next);
       this.changed.emit(next);
-      // bleibt offen – Footer "Done/Fertig" schließt
+      // remains open – Footer "Done/Fertig" closes
     } else {
       this.valueSig.set(opt.value);
       this.onChange(opt.value);
@@ -294,7 +294,7 @@ export class IonxSearchSelect<T = unknown> implements ControlValueAccessor {
     }
   }
 
-  /** Tastatursteuerung */
+  /** Keyboard Navigation */
   onKeydown(ev: KeyboardEvent) {
     const len = this.filtered().length;
     if (len === 0) return;

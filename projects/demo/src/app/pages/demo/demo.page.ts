@@ -49,26 +49,26 @@ type Id = string;
   ],
 })
 export class DemoPage {
-  // Optionen
+  // Options
   readonly cityOptions: SelectOption<Id>[] = [
     { value: 'ber', label: 'Berlin' },
     { value: 'ham', label: 'Hamburg' },
-    { value: 'muc', label: 'München' },
-    { value: 'cgn', label: 'Köln', disabled: true },
+    { value: 'muc', label: 'Munich' },
+    { value: 'cgn', label: 'Cologne', disabled: true },
     { value: 'fra', label: 'Frankfurt' },
   ];
 
-  // Reactive Forms (weiterhin CVA)
+  // Reactive Forms
   readonly form = new FormGroup({
     city: new FormControl<Id | null>(null),
     cities: new FormControl<Id[]>([]),
   });
 
-  // 🔹 Anzeige-State als Signals (ohne RxJS)
+  // 🔹 Display-State as Signals (without RxJS)
   private readonly selectedCity = signal<Id | null>(this.form.controls.city.value);
   private readonly selectedCities = signal<Id[]>(this.form.controls.cities.value ?? []);
 
-  // 🔹 Anzeige-Labels aus den Signals ableiten
+  // 🔹 Display-Labels derived from Signals
   readonly currentCityLabel = computed(() => {
     const id = this.selectedCity();
     return this.cityOptions.find((o) => o.value === id)?.label ?? '–';
@@ -80,7 +80,7 @@ export class DemoPage {
     return ids.map((id) => map.get(id) ?? id).join(', ') || '–';
   });
 
-  // Events aus der Komponente → Signals updaten (kein RxJS)
+  // Events from the component → Signals update (no RxJS)
   onSingleChanged(v: Id | Id[] | null) {
     this.selectedCity.set(Array.isArray(v) ? v[0] ?? null : v);
   }

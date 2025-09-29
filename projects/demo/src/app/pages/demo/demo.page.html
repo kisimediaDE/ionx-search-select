@@ -16,7 +16,7 @@
             <ionx-search-select
               [locale]="'en'"
               [options]="cityOptions"
-              placeholder="Stadt wählen…"
+              placeholder="Select city…"
               [formControl]="form.controls.city"
               (changed)="onSingleChanged($event)"
             >
@@ -24,7 +24,7 @@
 
             <ion-list class="ion-margin-top">
               <ion-item>
-                <ion-label>Aktuelle Auswahl</ion-label>
+                <ion-label>Current Selection</ion-label>
                 <ion-note slot="end">{{ currentCityLabel() }}</ion-note>
               </ion-item>
             </ion-list>
@@ -42,7 +42,7 @@
               [locale]="'en'"
               [options]="cityOptions"
               [multiple]="true"
-              placeholder="Städte wählen…"
+              placeholder="Select cities…"
               [formControl]="form.controls.cities"
               (changed)="onMultiChanged($event)"
             >
@@ -50,7 +50,7 @@
 
             <ion-list class="ion-margin-top">
               <ion-item>
-                <ion-label>Aktuelle Auswahl</ion-label>
+                <ion-label>Current Selection</ion-label>
                 <ion-note slot="end">{{ currentCitiesLabel() }}</ion-note>
               </ion-item>
             </ion-list>
